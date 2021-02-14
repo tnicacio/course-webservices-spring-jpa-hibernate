@@ -3,6 +3,7 @@ package com.tnicacio.course.entities;
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.HashSet;
+import java.util.Optional;
 import java.util.Set;
 
 import javax.persistence.CascadeType;
@@ -88,16 +89,23 @@ public class Order implements Serializable {
 		}
 	}
 	
-	public Set<OrderItem> getItems() {
-		return items;
-	}
-	
 	public Payment getPayment() {
 		return payment;
 	}
 
 	public void setPayment(Payment payment) {
 		this.payment = payment;
+	}
+	
+	public Set<OrderItem> getItems() {
+		return items;
+	}
+	
+	public Double getTotal() {
+		Double sum = items.stream()
+						.map(i -> i.getSubTotal())
+						.reduce(0.0, (a,b) -> a+b);
+		return sum;
 	}
 
 	@Override
